@@ -1,9 +1,7 @@
-#include<capp.h>
-#include<print_temp.h>
+#include<stdio.h>
 
 int main()
 {
-	temp t = {.s = 7, .str = "Hello World"};
-	print_temp_test(t);
+	printf("Hello world!!");
 	return 0;
 }
