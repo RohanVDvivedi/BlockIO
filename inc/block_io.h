@@ -19,7 +19,7 @@ struct block_file
 // file sizes and file offsets on any posix system can only be stored/worked with in a off_t (a signed integral) type integer
 
 // maximum value of off_t data type
-#define OFF_T_MAX  (~( ((off_t)(1)) << ((sizeof(off_t) * CHAR_BIT) - 1) ))
+#define OFF_T_MAX  ((off_t) (~( ((off_t)(1)) << ((sizeof(off_t) * CHAR_BIT) - 1) )))
 
 // maximum blocks counts physically possible to be addressable by an off_t variable
 #define MAX_BLOCK_COUNT(BLOCK_SIZE)	(OFF_T_MAX / BLOCK_SIZE)
