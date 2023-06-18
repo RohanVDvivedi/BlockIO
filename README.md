@@ -17,7 +17,7 @@ A library that allows you to perfrom block IO on posix systems. Api is catered t
 ## Using The library
  * add `-lblockio` linker flag, while compiling your application
  * do not forget to include appropriate public api headers as and when needed. this includes
-   * `#include<blockio.h>`
+   * `#include<block_io.h>`
 
 ## Instructions for uninstalling library
 
