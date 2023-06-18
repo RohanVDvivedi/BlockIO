@@ -1,13 +1,13 @@
-# c_template_application
-A template for all of my c projects.
+# BlockIO
+A library that allows you to perfrom block IO on posix systems. Api is catered to only allowing you to read and write blocks on data randomly. You can specify flags that you like.
 
 ## Setup instructions
 
 **Download source code :**
- * `git clone https://github.com/RohanVDvivedi/c_template_application.git`
+ * `git clone https://github.com/RohanVDvivedi/BlockIO.git`
 
 **Build from source :**
- * `cd c_template_application`
+ * `cd BlockIO`
  * `make clean all`
 
 **Install from the build :**
@@ -15,13 +15,12 @@ A template for all of my c projects.
  * ***Once you have installed from source, you may discard the build by*** `make clean`
 
 ## Using The library
- * add `-lcapp` linker flag, while compiling your application
+ * add `-lblockio` linker flag, while compiling your application
  * do not forget to include appropriate public api headers as and when needed. this includes
-   * `#include<capp.h>`
-   * `#include<print_temp.h>`
+   * `#include<blockio.h>`
 
 ## Instructions for uninstalling library
 
 **Uninstall :**
- * `cd c_template_application`
+ * `cd BlockIO`
  * `sudo make uninstall`
