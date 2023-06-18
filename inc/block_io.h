@@ -13,9 +13,19 @@ struct block_file
 	size_t block_size;
 };
 
-#define MAX_BLOCK_ID(BLOCK_SIZE)
+// file sizes and file offsets on any posix system can only be stored/worked with in a off_t (a signed integral) type integer
 
-#define MAX_BLOCK_COUNT(BLOCK_SIZE) (SSIZE_MAX / BLOCK_SIZE)
+// maximum value of off_t data type
+#define OFF_T_MAX  (~( ((off_t)(1)) << ((sizeof(off_t) * CHAR_BIT) - 1) ))
+
+// maximum blocks counts physically possible to be addressable by an off_t variable
+#define MAX_BLOCK_COUNT(BLOCK_SIZE)	(OFF_T_MAX / BLOCK_SIZE)
+
+// this is the maximum possible value of block_id that can be held by a off_t
+#define MAX_BLOCK_ID(BLOCK_SIZE)	(MAX_BLOCK_COUNT(BLOCK_SIZE) - 1)
+
+// this is the maximum block counts that you can submit for an IO, in the read_blocks and write_blocks functions calls
+#define MAX_BLOCK_COUNT_FOR_IO(BLOCK_SIZE) (SSIZE_MAX / BLOCK_SIZE)
 
 // you must flush (flush_all_writes_to_disk) intermittently to ensure that the data has reached the non-volatile memory of the disk
 // for surety of the data being flushed after every write call, you must open/create the file with O_DIRECT | O_SYNC flags
