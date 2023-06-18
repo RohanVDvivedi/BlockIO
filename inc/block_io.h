@@ -1,6 +1,9 @@
 #ifndef BLOCK_IO_H
 #define BLOCK_IO_H
 
+#include<stddef.h>
+#include<unistd.h>
+
 typedef struct block_file block_file;
 struct block_file
 {
