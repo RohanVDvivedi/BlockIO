@@ -9,15 +9,21 @@ struct block_file
 
 	// size of the physical block on the disk of this file
 	// this will be populated only after the first call to get_block_size_for_block_file
+	// it's initial value will be 0 -> an invalid value
 	size_t block_size;
 };
+
+// you must flush (flush_all_writes_to_disk) intermittently to ensure that the data has reached the non-volatile memory of the disk
+// for surety of the data being flushed after every write call, you must open/create the file with O_DIRECT | O_SYNC flags
 
 // return values of <= 0 are errors
 
 // return value of NULL is a failure to create block file
+// additional flags are the once in addition to the default flags
 block_file* create_block_file(const char* filename, int additional_flags);
 
 // return value of NULL is a failure to open block file
+// additional flags are the once in addition to the default flags
 block_file* open_block_file(const char* filename, int additional_flags);
 
 // size of each physical block on the disk of this file
@@ -29,6 +35,7 @@ ssize_t read_blocks_from_block_file(const block_file* fp, void* dest, uint64_t b
 
 // return of a negative value implies an error, and return of a positive value is the number of bytes written
 // ensure that src atleast has block_count & block_size number of bytes allocated
+// a write call may or may not flush the contents to non-volatile disk
 ssize_t write_blocks_to_block_file(const block_file* fp, const void* src, uint64_t block_id, uint64_t block_count);
 
 // return of a negative value implies an error, return value of 0 is a success
