@@ -1,6 +1,0 @@
- * BlockIO project alows you to read/write data from block device, with a predefined block size
-  * suggested api
-   open_block_file, close_block_file
-   get_block_size();
-   read_blocks (const block_io_handle* handle,      void* dest, uint64_t block_id, uint64_t block_count);
-   write_blocks(const block_io_handle* handle, const void* src, uint64_t block_id, uint64_t block_count);
