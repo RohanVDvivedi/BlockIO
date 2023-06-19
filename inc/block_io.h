@@ -43,13 +43,15 @@ struct block_file
 
 // return values of <= 0 are errors
 
-// return value of NULL is a failure to create block file
+// negative return value is a failure to create block file
 // additional flags are the once in addition to the default flags
-block_file* create_block_file(const char* filename, int additional_flags);
+// if a file already exists, this call will fail and file will not be created
+int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags);
 
-// return value of NULL is a failure to open block file
+// negative return value is a failure to open block file
 // additional flags are the once in addition to the default flags
-block_file* open_block_file(const char* filename, int additional_flags);
+// if a file does not exist, this will fail and it will not be opened
+int open_block_file(block_file* fp, const char* filename, int additional_flags);
 
 // size of each physical block on the disk of this file
 size_t get_block_size_for_block_file(const block_file* fp);
@@ -67,7 +69,6 @@ ssize_t write_blocks_to_block_file(const block_file* fp, const void* src, off_t 
 int flush_all_writes_to_block_file(const block_file* fp);
 
 // return of a negative value implies an error, return value of 0 is a success
-// fp will be freed even on an error, you must not call close file again, even on an error
-int close_block_file(block_file* fp);
+int close_block_file(const block_file* fp);
 
 #endif

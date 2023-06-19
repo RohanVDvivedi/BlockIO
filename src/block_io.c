@@ -2,9 +2,13 @@
 
 #include<stdlib.h>
 
-block_file* create_block_file(const char* filename, int additional_flags);
+int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags)
+{
+}
 
-block_file* open_block_file(const char* filename, int additional_flags);
+int open_block_file(block_file* fp, const char* filename, int additional_flags)
+{
+}
 
 size_t get_block_size_for_block_file(const block_file* fp);
 
@@ -47,9 +51,7 @@ int flush_all_writes_to_block_file(const block_file* fp)
 	return fsync(fp->file_descriptor);
 }
 
-int close_block_file(block_file* fp)
+int close_block_file(const block_file* fp)
 {
-	int error = close(fp->file_descriptor);
-	free(fp);
-	return error;
+	return close(fp->file_descriptor);
 }
