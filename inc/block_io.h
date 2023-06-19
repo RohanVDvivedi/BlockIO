@@ -4,6 +4,9 @@
 // making all io functions work with 64 bit off_t, please ensure that this works
 #define _FILE_OFFSET_BITS 64
 
+// for using additional linux specific flags
+#define _GNU_SOURCE
+
 #include<stddef.h>
 #include<unistd.h>
 #include<fcntl.h>
