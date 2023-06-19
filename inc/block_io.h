@@ -50,12 +50,12 @@ struct block_file
 // these are the only additional flags that you can set in the create_and_open_block_file and open_block_file functions
 #define ALLOWED_ADDITIONAL_FLAGS (O_DIRECT | O_SYNC | O_DSYNC | O_TRUNC)
 
-// negative return value is a failure to create block file
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
 // additional flags are the once in addition to the default flags
 // if a file already exists, this call will fail and file will not be created/opened
 int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags);
 
-// negative return value is a failure to open block file
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
 // additional flags are the once in addition to the default flags
 // if a file does not exist, this will fail and no file will not be created/opened
 int open_block_file(block_file* fp, const char* filename, int additional_flags);
@@ -63,19 +63,19 @@ int open_block_file(block_file* fp, const char* filename, int additional_flags);
 // size of each physical block on the disk of this file
 size_t get_block_size_for_block_file(block_file* fp);
 
-// return of a negative value implies an error, and return of a positive value is the number of bytes read
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
 // ensure that dest atleast has block_count & block_size number of bytes allocated
-ssize_t read_blocks_from_block_file(block_file* fp, void* dest, off_t block_id, size_t block_count);
+int read_blocks_from_block_file(block_file* fp, void* dest, off_t block_id, size_t block_count);
 
-// return of a negative value implies an error, and return of a positive value is the number of bytes written
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
 // ensure that src atleast has block_count & block_size number of bytes allocated
 // a write call may or may not flush the contents to non-volatile disk
-ssize_t write_blocks_to_block_file(block_file* fp, const void* src, off_t block_id, size_t block_count);
+int write_blocks_to_block_file(block_file* fp, const void* src, off_t block_id, size_t block_count);
 
-// return of a negative value implies an error, return value of 0 is a success
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
 int flush_all_writes_to_block_file(const block_file* fp);
 
-// return of a negative value implies an error, return value of 0 is a success
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
 int close_block_file(const block_file* fp);
 
 #endif
