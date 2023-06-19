@@ -77,6 +77,13 @@ int close_block_file(const block_file* fp)
 // all of the linux specific code is below
 //--------------------------------------------
 
+#include<string.h>
+#include<stdio.h>
+#include<sys/ioctl.h>
+#include<sys/stat.h>
+#include<sys/sysmacros.h>
+#include<linux/fs.h>
+
 static int find_device(const block_file* fp, char device[256])
 {
 	struct stat fp_stat;
@@ -118,7 +125,7 @@ size_t get_block_size_for_block_file(block_file* fp)
 
 	// TODO get fp->block_size for the device of this file
 	char device_path[256];
-	if(find_device(dbfile_p, device_path) == -1)
+	if(find_device(fp, device_path) == -1)
 	{
 		printf("Device does not seem to be found for file provided\n");
 		goto END;
@@ -142,7 +149,7 @@ size_t get_block_size_for_block_file(block_file* fp)
 	}
 
 	printf("getting physical block size as %d\n", physical_block_size);
-	dbfile_p->block_size = physical_block_size;
+	fp->block_size = physical_block_size;
 
 	END:;
 
