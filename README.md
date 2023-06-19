@@ -1,5 +1,9 @@
 # BlockIO
-A library that allows you to perfrom block IO on posix systems. Api is catered to only allowing you to read and write blocks on data randomly. You can specify flags that you like.
+A library that allows you to perfrom synchronous blocking, block IO on posix systems. Api is catered to only allowing you to read and write consecutive blocks of data blockingly to a persistent disk.
+
+You can specify only selected few additoonal flags that you may need like, O_DIREC, O_DSYNC or O_SYNC. You can also truncate a file while opening it using O_TRUNC flags.
+
+It works with large file support. i.e. off_t is 64 bits wide allowing you to access large files.
 
 ## Setup instructions
 **Install dependencies :**
