@@ -45,12 +45,12 @@ struct block_file
 
 // negative return value is a failure to create block file
 // additional flags are the once in addition to the default flags
-// if a file already exists, this call will fail and file will not be created
+// if a file already exists, this call will fail and file will not be created/opened
 int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags);
 
 // negative return value is a failure to open block file
 // additional flags are the once in addition to the default flags
-// if a file does not exist, this will fail and it will not be opened
+// if a file does not exist, this will fail and no file will not be created/opened
 int open_block_file(block_file* fp, const char* filename, int additional_flags);
 
 // size of each physical block on the disk of this file
