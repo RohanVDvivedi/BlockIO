@@ -14,7 +14,7 @@ int create_and_open_block_file(block_file* fp, const char* filename, int additio
 								CREATE_OR_FAIL_CREATE_IF_FILE_EXISTS |
 								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
 								(additional_flags & ALLOWED_ADDITIONAL_FLAGS),
-							S_IRWXU);
+							S_IRUSR | S_IWUSR);
 	return fp->file_descriptor;
 }
 
@@ -24,8 +24,7 @@ int open_block_file(block_file* fp, const char* filename, int additional_flags)
 	fp->file_descriptor = open(filename,
 								OPEN_WITH_READ_WRITE_PERMISSION |
 								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
-								(additional_flags & ALLOWED_ADDITIONAL_FLAGS),
-							S_IRWXU);
+								(additional_flags & ALLOWED_ADDITIONAL_FLAGS));
 	return fp->file_descriptor;
 }
 
