@@ -1,12 +1,13 @@
+#include<block_io.h>
+
 #include<stdio.h>
 #include<stdlib.h>
-
-#include<block_io.h>
+#include<inttypes.h>
 
 #define ADDITIONAL_FLAGS	0
 #define FILENAME			"test.db"
 
-#define FORMAT "This is block no %d - %d\n"
+#define FORMAT "This is block no %" PRId64 " - %" PRId64 "\n"
 
 #define BLOCK_COUNT 4
 
@@ -24,25 +25,25 @@ int main()
 	size_t blocks_size = get_block_size_for_block_file(&bf) * BLOCK_COUNT;
 	char* blocks = aligned_alloc(4096, blocks_size);
 
-	for(int i = 0; i < 32; i += BLOCK_COUNT)
+	for(off_t i = 0; i < 32; i += BLOCK_COUNT)
 	{
-		int first = i;
-		int last = i + BLOCK_COUNT - 1;
+		off_t first = i;
+		off_t last = i + BLOCK_COUNT - 1;
 		snprintf(blocks, blocks_size, FORMAT, first, last);
 		if(!write_blocks_to_block_file(&bf, blocks, first, BLOCK_COUNT))
-			printf("error writing to blocks %d - %d\n", first, last);
+			printf("error writing to blocks %"PRId64" - %" PRId64"\n", first, last);
 	}
 
 	if(!flush_all_writes_to_block_file(&bf))
 		printf("error flushing written blocks\n");
 
-	for(int i = 0; i < 32; i += BLOCK_COUNT)
+	for(off_t i = 0; i < 32; i += BLOCK_COUNT)
 	{
-		int first = i;
-		int last = i + BLOCK_COUNT - 1;
+		off_t first = i;
+		off_t last = i + BLOCK_COUNT - 1;
 		if(!read_blocks_from_block_file(&bf, blocks, first, BLOCK_COUNT))
-			printf("error reading from blocks %d - %d\n", first, last);
-		printf("%d - %d block read -> %s\n", first, last, blocks);
+			printf("error reading from blocks %" PRId64 " - %" PRId64 "\n", first, last);
+		printf("%" PRId64 " - %" PRId64 " block read -> %s\n", first, last, blocks);
 	}
 
 	free(blocks);
