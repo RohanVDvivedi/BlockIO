@@ -66,7 +66,7 @@ ssize_t write_blocks_to_block_file(const block_file* fp, const void* src, off_t 
 // return of a negative value implies an error, return value of 0 is a success
 int flush_all_writes_to_block_file(const block_file* fp);
 
-// return value
+// return of a negative value implies an error, return value of 0 is a success
 int close_block_file(const block_file* fp);
 
 #endif
