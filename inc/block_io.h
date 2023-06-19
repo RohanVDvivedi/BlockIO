@@ -1,6 +1,9 @@
 #ifndef BLOCK_IO_H
 #define BLOCK_IO_H
 
+// making all io functions work with 64 bit off_t, please ensure that this works
+#define _FILE_OFFSET_BITS 64
+
 #include<stddef.h>
 #include<unistd.h>
 
