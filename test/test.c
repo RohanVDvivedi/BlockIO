@@ -6,7 +6,9 @@
 #define ADDITIONAL_FLAGS	0
 #define FILENAME			"test.db"
 
-#define FORMAT "This is block no %d\n"
+#define FORMAT "This is block no %d - %d\n"
+
+#define BLOCK_COUNT 4
 
 int main()
 {
@@ -19,26 +21,31 @@ int main()
 
 	printf("physical block size of the file %zu\n", get_block_size_for_block_file(&bf));
 
-	char* block = malloc(get_block_size_for_block_file(&bf));
+	size_t blocks_size = get_block_size_for_block_file(&bf) * BLOCK_COUNT;
+	char* blocks = aligned_alloc(4096, blocks_size);
 
-	for(int i = 0; i < 32; i++)
+	for(int i = 0; i < 32; i += BLOCK_COUNT)
 	{
-		snprintf(block, get_block_size_for_block_file(&bf), FORMAT, i);
-		if(!write_blocks_to_block_file(&bf, block, i, 1))
-			printf("error writing to block %d\n", i);
+		int first = i;
+		int last = i + BLOCK_COUNT - 1;
+		snprintf(blocks, blocks_size, FORMAT, first, last);
+		if(!write_blocks_to_block_file(&bf, blocks, first, BLOCK_COUNT))
+			printf("error writing to blocks %d - %d\n", first, last);
 	}
 
 	if(!flush_all_writes_to_block_file(&bf))
 		printf("error flushing written blocks\n");
 
-	for(int i = 0; i < 32; i++)
+	for(int i = 0; i < 32; i += BLOCK_COUNT)
 	{
-		if(!read_blocks_from_block_file(&bf, block, i, 1))
-			printf("error reading from block %d\n", i);
-		printf("%d block read -> %s\n", i, block);
+		int first = i;
+		int last = i + BLOCK_COUNT - 1;
+		if(!read_blocks_from_block_file(&bf, blocks, first, BLOCK_COUNT))
+			printf("error reading from blocks %d - %d\n", first, last);
+		printf("%d - %d block read -> %s\n", first, last, blocks);
 	}
 
-	free(block);
+	free(blocks);
 
 	close_block_file(&bf);
 
