@@ -2,15 +2,42 @@
 
 #include<stdlib.h>
 
+#define OPEN_WITH_READ_WRITE_PERMISSION 				(O_RDWR)
+#define CREATE_OR_FAIL_CREATE_IF_FILE_EXISTS 			(O_CREAT | O_EXCL)
+#define DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS 		(O_NOATIME)
+
 int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags)
 {
+	fp->block_size = 0;
+	fp->file_descriptor = open(filename,
+								OPEN_WITH_READ_WRITE_PERMISSION |
+								CREATE_OR_FAIL_CREATE_IF_FILE_EXISTS |
+								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
+								(additional_flags & ALLOWED_ADDITIONAL_FLAGS),
+							S_IRWXU);
+	return fp->file_descriptor;
 }
 
 int open_block_file(block_file* fp, const char* filename, int additional_flags)
 {
+	fp->block_size = 0;
+	fp->file_descriptor = open(filename,
+								OPEN_WITH_READ_WRITE_PERMISSION |
+								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
+								(additional_flags & ALLOWED_ADDITIONAL_FLAGS),
+							S_IRWXU);
+	return fp->file_descriptor;
 }
 
-size_t get_block_size_for_block_file(const block_file* fp);
+size_t get_block_size_for_block_file(const block_file* fp)
+{
+	if(fp->block_size)
+		return fp->block_size;
+
+	// TODO get fp->block_size for the device of this file
+
+	return fp->block_size;
+}
 
 ssize_t read_blocks_from_block_file(const block_file* fp, void* dest, off_t block_id, size_t block_count)
 {

@@ -6,6 +6,7 @@
 
 #include<stddef.h>
 #include<unistd.h>
+#include<fcntl.h>
 
 #include<cutlery_stds.h>
 
@@ -42,6 +43,9 @@ struct block_file
 // for surety of the data being flushed after every write call, you must open/create the file with O_DIRECT | O_SYNC flags
 
 // return values of <= 0 are errors
+
+// these are the only additional flags that you can set in the create_and_open_block_file and open_block_file functions
+#define ALLOWED_ADDITIONAL_FLAGS (O_DIRECT | O_SYNC | O_DSYNC | O_TRUNC)
 
 // negative return value is a failure to create block file
 // additional flags are the once in addition to the default flags
