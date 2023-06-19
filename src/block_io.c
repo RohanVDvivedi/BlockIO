@@ -28,12 +28,46 @@ int open_block_file(block_file* fp, const char* filename, int additional_flags)
 	return fp->file_descriptor;
 }
 
+// must be non zero
+#define DEFAULT_BLOCK_SIZE 512
+
 size_t get_block_size_for_block_file(const block_file* fp)
 {
 	if(fp->block_size)
 		return fp->block_size;
 
 	// TODO get fp->block_size for the device of this file
+	char device_path[256];
+	if(find_device(dbfile_p, device_path) == -1)
+	{
+		printf("Device does not seem to be found for file provided\n");
+		goto END;
+	}
+
+	printf("Given file is on device %s\n", device_path);
+	int device_fd = open(device_path, O_RDONLY);
+	if(device_fd == -1)
+	{
+		printf("Could not open device %s\n", device_path);
+		goto END;
+	}
+
+	int physical_block_size = -1;
+	int err_return = ioctl(device_fd, BLKSSZGET, &physical_block_size);
+	close(device_fd);
+	if(err_return == -1)
+	{
+		printf("Getting physical block size returns %d, errnum %d\n", err_return, errno);
+		goto END;
+	}
+
+	printf("getting physical block size as %d\n", physical_block_size);
+	dbfile_p->block_size = physical_block_size;
+
+	END:;
+
+	if(fp->block_size == 0)
+		fp->block_size = DEFAULT_BLOCK_SIZE;
 
 	return fp->block_size;
 }
