@@ -11,6 +11,8 @@
 
 #define BLOCK_COUNT 4
 
+#define BLOCK_COUNTS_TO_ACCESS 32
+
 int main()
 {
 	block_file bf;
@@ -25,7 +27,7 @@ int main()
 	size_t blocks_size = get_block_size_for_block_file(&bf) * BLOCK_COUNT;
 	char* blocks = aligned_alloc(4096, blocks_size);
 
-	for(off_t i = 0; i < 32; i += BLOCK_COUNT)
+	for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
 	{
 		off_t first = i;
 		off_t last = i + BLOCK_COUNT - 1;
@@ -37,7 +39,7 @@ int main()
 	if(!flush_all_writes_to_block_file(&bf))
 		printf("error flushing written blocks\n");
 
-	for(off_t i = 0; i < 32; i += BLOCK_COUNT)
+	for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
 	{
 		off_t first = i;
 		off_t last = i + BLOCK_COUNT - 1;
