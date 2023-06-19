@@ -2,6 +2,7 @@
 *.a
 *.out
 *.DS_Store
+*.db
 
 obj
 lib
