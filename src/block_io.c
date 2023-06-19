@@ -90,17 +90,17 @@ static int find_device(const block_file* fp, char device[256])
 	if(-1 == fstat(fp->file_descriptor, &fp_stat))
 		return -1;
 	
-	char minmaj[128];
-	sprintf(minmaj, "%u:%u ", major(fp_stat.st_dev), minor(fp_stat.st_dev));
+	char major_minor[12];
+	sprintf(major_minor, "%u:%u ", major(fp_stat.st_dev), minor(fp_stat.st_dev));
 
 	FILE* f = fopen("/proc/self/mountinfo", "r");
 
-	char sline[256];
+	char sline[512];
 	int device_found = -1;
-	while(fgets(sline, 256, f))
+	while(fgets(sline, 512, f))
 	{
 		char* suffix = strstr(sline, " - ");
-		char* where = strstr(sline, minmaj);
+		char* where = strstr(sline, major_minor);
 		if(where && where <= suffix)
 		{
 			char* token = strtok(suffix, " -:");
