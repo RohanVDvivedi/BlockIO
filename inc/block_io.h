@@ -7,6 +7,11 @@
 #include<stddef.h>
 #include<unistd.h>
 
+#include<cutlery_stds.h>
+
+// fail build of the size of 
+fail_build_on((sizeof(off_t) * CHAR_BIT) <= 64)
+
 typedef struct block_file block_file;
 struct block_file
 {
