@@ -1,6 +1,7 @@
 #include<block_io.h>
 
 #include<stdlib.h>
+#include<errno.h>
 
 #define OPEN_WITH_READ_WRITE_PERMISSION 				(O_RDWR)
 #define CREATE_OR_FAIL_CREATE_IF_FILE_EXISTS 			(O_CREAT | O_EXCL)
