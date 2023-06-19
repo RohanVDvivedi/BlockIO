@@ -11,7 +11,7 @@
 
 #define BLOCK_COUNT 4
 
-#define BLOCK_COUNTS_TO_ACCESS 32
+#define BLOCK_COUNTS_TO_ACCESS 2048
 
 int main()
 {
