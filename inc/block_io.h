@@ -67,6 +67,7 @@ ssize_t write_blocks_to_block_file(const block_file* fp, const void* src, off_t 
 int flush_all_writes_to_block_file(const block_file* fp);
 
 // return of a negative value implies an error, return value of 0 is a success
-int close_block_file(const block_file* fp);
+// fp will be freed even on an error, you must not call close file again, even on an error
+int close_block_file(block_file* fp);
 
 #endif

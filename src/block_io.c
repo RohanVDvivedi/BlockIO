@@ -1,5 +1,7 @@
 #include<block_io.h>
 
+#include<stdlib.h>
+
 block_file* create_block_file(const char* filename, int additional_flags);
 
 block_file* open_block_file(const char* filename, int additional_flags);
@@ -12,4 +14,9 @@ ssize_t write_blocks_to_block_file(const block_file* fp, const void* src, off_t 
 
 int flush_all_writes_to_block_file(const block_file* fp);
 
-int close_block_file(const block_file* fp);
+int close_block_file(block_file* fp)
+{
+	int error = close(fp->file_descriptor);
+	free(fp);
+	return error;
+}
