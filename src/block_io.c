@@ -12,7 +12,10 @@ ssize_t read_blocks_from_block_file(const block_file* fp, void* dest, off_t bloc
 
 ssize_t write_blocks_to_block_file(const block_file* fp, const void* src, off_t block_id, size_t block_count);
 
-int flush_all_writes_to_block_file(const block_file* fp);
+int flush_all_writes_to_block_file(const block_file* fp)
+{
+	return fsync(fp->file_descriptor);
+}
 
 int close_block_file(block_file* fp)
 {
