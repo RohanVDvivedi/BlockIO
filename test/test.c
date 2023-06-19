@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include<inttypes.h>
 
-#define ADDITIONAL_FLAGS	0
+#define ADDITIONAL_FLAGS	0 //| O_DIRECT | O_SYNC
 #define FILENAME			"test.db"
 
 #define FORMAT "This is block no %" PRId64 " - %" PRId64 "\n"
