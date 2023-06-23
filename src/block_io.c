@@ -38,7 +38,7 @@ int read_blocks_from_block_file(block_file* fp, void* dest, off_t block_id, size
 	while(bytes_count > bytes_read)
 	{
 		ssize_t result = pread(fp->file_descriptor, dest + bytes_read, bytes_count - bytes_read, start_offset + bytes_read);
-		if(result == -1)
+		if(result == -1 || result == 0)
 			return 0;
 		bytes_read += result;
 	}
