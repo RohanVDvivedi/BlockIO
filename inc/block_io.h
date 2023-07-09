@@ -30,6 +30,10 @@ struct block_file
 
 // file sizes and file offsets on any posix system can only be stored/worked with in a off_t (a signed integral) type integer
 
+// below macros must be used in your application to validate the params block_id and block_count
+// for the functions read_blocks_from_block_file and write_blocks_to_block_file
+// these functions will not validate the params for you
+
 // maximum value of off_t data type
 #define OFF_T_MAX SIGNED_MAX_VALUE_OF(off_t)
 
