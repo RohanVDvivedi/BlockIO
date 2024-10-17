@@ -50,6 +50,8 @@ int main()
 
 	free(blocks);
 
+	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
+
 	close_block_file(&bf);
 
 	return 0;
