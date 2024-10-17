@@ -52,7 +52,9 @@ struct block_file
 // return values of <= 0 are errors
 
 // these are the only additional flags that you can set in the create_and_open_block_file and open_block_file functions
-#define ALLOWED_ADDITIONAL_FLAGS (O_DIRECT | O_SYNC | O_DSYNC | O_TRUNC)
+#define ALLOWED_ADDITIONAL_FLAGS (O_DIRECT | O_SYNC | O_DSYNC | O_TRUNC | O_TMPFILE | O_EXCL)
+
+// to open a temporary file use O_TMPFILE | O_EXCL flag with simple open call, this file will be deleted on process termination
 
 // return of 0 -> failure, 1 -> success, check errno for error code from system call
 // additional flags are the once in addition to the default flags
