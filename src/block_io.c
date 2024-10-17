@@ -158,3 +158,13 @@ size_t get_block_size_for_block_file(block_file* fp)
 
 	return fp->block_size;
 }
+
+off_t get_total_size_for_block_file(block_file* fp)
+{
+	struct stat file_status;
+    if (fstat(fp->file_descriptor, &file_status) < 0) {
+        return -1;
+    }
+
+    return file_status.st_size;
+}

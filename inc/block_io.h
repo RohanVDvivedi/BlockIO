@@ -67,6 +67,9 @@ int open_block_file(block_file* fp, const char* filename, int additional_flags);
 // size of each physical block on the disk of this file
 size_t get_block_size_for_block_file(block_file* fp);
 
+// total size of file in bytes
+off_t get_total_size_for_block_file(block_file* fp);
+
 // return of 0 -> failure, 1 -> success, check errno for error code from system call
 // ensure that dest atleast has block_count & block_size number of bytes allocated
 int read_blocks_from_block_file(block_file* fp, void* dest, off_t block_id, size_t block_count);
