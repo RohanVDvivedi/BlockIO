@@ -63,6 +63,17 @@ int write_blocks_to_block_file(block_file* fp, const void* src, off_t block_id, 
 	return 1;
 }
 
+int truncate_block_file(block_file* fp, size_t block_count)
+{
+	off_t bytes_count = block_count * get_block_size_for_block_file(fp);
+
+	int result = ftruncate(fp->file_descriptor, bytes_count);
+	if(result == -1)
+		return 0;
+
+	return 1;
+}
+
 int flush_all_writes_to_block_file(const block_file* fp)
 {
 	return fsync(fp->file_descriptor) != -1;

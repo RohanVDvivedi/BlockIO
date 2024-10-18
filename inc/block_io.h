@@ -81,6 +81,9 @@ int read_blocks_from_block_file(block_file* fp, void* dest, off_t block_id, size
 // a write call may or may not flush the contents to non-volatile disk
 int write_blocks_to_block_file(block_file* fp, const void* src, off_t block_id, size_t block_count);
 
+// the file will be truncated to contain only block_count number of blocks post success of this operation
+int truncate_block_file(block_file* fp, size_t block_count);
+
 // return of 0 -> failure, 1 -> success, check errno for error code from system call
 int flush_all_writes_to_block_file(const block_file* fp);
 
