@@ -26,6 +26,7 @@ int main()
 		printf("failed to create/open block file\n");
 		return -1;
 	}
+	printf("\n\nREGULAR FILE\n\n");
 #else
 	write_first = 1;
 	if(!temp_block_file(&bf, ".", ADDITIONAL_FLAGS))
@@ -33,6 +34,7 @@ int main()
 		printf("failed to open temp block file\n");
 		return -1;
 	}
+	printf("\n\nTEMPORARY FILE\n\n");
 #endif
 
 	printf("physical block size of the file %zu\n", get_block_size_for_block_file(&bf));
