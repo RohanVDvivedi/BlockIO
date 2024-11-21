@@ -36,7 +36,8 @@ int temp_block_file(block_file* fp, const char* directory, int additional_flags)
 	fp->file_descriptor = open(directory,
 								TEMP_FILE_CREATION |
 								OPEN_WITH_READ_WRITE_PERMISSION |
-								(additional_flags & ALLOWED_ADDITIONAL_FLAGS));
+								(additional_flags & ALLOWED_ADDITIONAL_FLAGS),
+							S_IRUSR | S_IWUSR);
 	return fp->file_descriptor != -1;
 }
 
