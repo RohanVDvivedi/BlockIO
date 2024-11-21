@@ -13,18 +13,21 @@
 
 #define BLOCK_COUNTS_TO_ACCESS 2048
 
-#define TEST_TEMP_FILE
+//#define TEST_TEMP_FILE
 
 int main()
 {
 	block_file bf;
+	int write_first = 0;
 #ifndef TEST_TEMP_FILE
-	if(!create_and_open_block_file(&bf, FILENAME, ADDITIONAL_FLAGS) && !open_block_file(&bf, FILENAME, ADDITIONAL_FLAGS | O_TRUNC))
+	// write first only if you created
+	if(!(write_first = create_and_open_block_file(&bf, FILENAME, ADDITIONAL_FLAGS)) && !open_block_file(&bf, FILENAME, ADDITIONAL_FLAGS | O_TRUNC))
 	{
 		printf("failed to create/open block file\n");
 		return -1;
 	}
 #else
+	write_first = 1;
 	if(!temp_block_file(&bf, ".", ADDITIONAL_FLAGS))
 	{
 		printf("failed to open temp block file\n");
@@ -37,17 +40,20 @@ int main()
 	size_t blocks_size = get_block_size_for_block_file(&bf) * BLOCK_COUNT;
 	char* blocks = aligned_alloc(4096, blocks_size);
 
-	for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
+	if(write_first)
 	{
-		off_t first = i;
-		off_t last = i + BLOCK_COUNT - 1;
-		snprintf(blocks, blocks_size, FORMAT, first, last);
-		if(!write_blocks_to_block_file(&bf, blocks, first, BLOCK_COUNT))
-			printf("error writing to blocks %"PRId64" - %" PRId64"\n", first, last);
-	}
+		for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
+		{
+			off_t first = i;
+			off_t last = i + BLOCK_COUNT - 1;
+			snprintf(blocks, blocks_size, FORMAT, first, last);
+			if(!write_blocks_to_block_file(&bf, blocks, first, BLOCK_COUNT))
+				printf("error writing to blocks %"PRId64" - %" PRId64"\n", first, last);
+		}
 
-	if(!flush_all_writes_to_block_file(&bf))
-		printf("error flushing written blocks\n");
+		if(!flush_all_writes_to_block_file(&bf))
+			printf("error flushing written blocks\n");
+	}
 
 	for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
 	{
