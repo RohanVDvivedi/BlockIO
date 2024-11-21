@@ -13,14 +13,24 @@
 
 #define BLOCK_COUNTS_TO_ACCESS 2048
 
+#define TEST_TEMP_FILE
+
 int main()
 {
 	block_file bf;
+#ifndef TEST_TEMP_FILE
 	if(!create_and_open_block_file(&bf, FILENAME, ADDITIONAL_FLAGS) && !open_block_file(&bf, FILENAME, ADDITIONAL_FLAGS | O_TRUNC))
 	{
-		printf("failed to create block file\n");
+		printf("failed to create/open block file\n");
 		return -1;
 	}
+#else
+	if(!temp_block_file(&bf, ".", ADDITIONAL_FLAGS))
+	{
+		printf("failed to open temp block file\n");
+		return -1;
+	}
+#endif
 
 	printf("physical block size of the file %zu\n", get_block_size_for_block_file(&bf));
 
