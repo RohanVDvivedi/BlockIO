@@ -52,19 +52,22 @@ struct block_file
 // return values of <= 0 are errors
 
 // these are the only additional flags that you can set in the create_and_open_block_file and open_block_file functions
-#define ALLOWED_ADDITIONAL_FLAGS (O_DIRECT | O_SYNC | O_DSYNC | O_TRUNC | O_TMPFILE | O_EXCL)
-
-// to open a temporary file use O_TMPFILE | O_EXCL flag with simple open call, this file will be deleted on process termination
+#define ALLOWED_ADDITIONAL_FLAGS (O_DIRECT | O_SYNC | O_DSYNC)
 
 // return of 0 -> failure, 1 -> success, check errno for error code from system call
-// additional flags are the once in addition to the default flags
+// additional flags are those in addition to the default flags
 // if a file already exists, this call will fail and file will not be created/opened
 int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags);
 
 // return of 0 -> failure, 1 -> success, check errno for error code from system call
-// additional flags are the once in addition to the default flags
+// additional flags are those in addition to the default flags
 // if a file does not exist, this will fail and no file will not be created/opened
 int open_block_file(block_file* fp, const char* filename, int additional_flags);
+
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
+// additional flags are those in addition to the default flags
+// thi function opens a default file
+int temp_block_file(block_file* fp, const char* directory, int additional_flags);
 
 // size of each physical block on the disk of this file
 size_t get_block_size_for_block_file(block_file* fp);

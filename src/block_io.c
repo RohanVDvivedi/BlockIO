@@ -5,6 +5,7 @@
 
 #define OPEN_WITH_READ_WRITE_PERMISSION 				(O_RDWR)
 #define CREATE_OR_FAIL_CREATE_IF_FILE_EXISTS 			(O_CREAT | O_EXCL)
+#define TEMP_FILE_CREATION								(O_TMPFILE | O_EXCL) // O_EXCL suggests that this fill will always remain a temp file (i.e. destroyed on closing)
 #define DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS 		(O_NOATIME)
 
 int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags)
@@ -25,6 +26,16 @@ int open_block_file(block_file* fp, const char* filename, int additional_flags)
 	fp->file_descriptor = open(filename,
 								OPEN_WITH_READ_WRITE_PERMISSION |
 								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
+								(additional_flags & ALLOWED_ADDITIONAL_FLAGS));
+	return fp->file_descriptor != -1;
+}
+
+int temp_block_file(block_file* fp, const char* directory, int additional_flags)
+{
+	fp->block_size = 0;
+	fp->file_descriptor = open(directory,
+								TEMP_FILE_CREATION |
+								OPEN_WITH_READ_WRITE_PERMISSION |
 								(additional_flags & ALLOWED_ADDITIONAL_FLAGS));
 	return fp->file_descriptor != -1;
 }
