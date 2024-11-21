@@ -42,6 +42,7 @@ int main()
 
 	if(write_first)
 	{
+		printf("\n\nWRITING\n\n");
 		for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
 		{
 			off_t first = i;
@@ -55,6 +56,7 @@ int main()
 			printf("error flushing written blocks\n");
 	}
 
+	printf("\n\nREADING\n\n");
 	for(off_t i = 0; i < BLOCK_COUNTS_TO_ACCESS; i += BLOCK_COUNT)
 	{
 		off_t first = i;
