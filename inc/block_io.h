@@ -93,4 +93,15 @@ int flush_all_writes_to_block_file(const block_file* fp);
 // return of 0 -> failure, 1 -> success, check errno for error code from system call
 int close_block_file(const block_file* fp);
 
+// below two functions allow you to punch a hole in the file and also get information of the first hole in the block region
+// these two functions may not be supported by every OS (my system linux does support it) and filesystem
+// so use them very carefully and only after ensuring that they exist and are supported
+
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
+int punch_hole_in_block_file(block_file* fp, off_t block_id, size_t block_count);
+
+// return of 0 -> failure, 1 -> success, check errno for error code from system call
+// if there is no hole in the region then first_hole_from will be set to OFF_T_MAX value
+int get_hole_in_block_file(block_file* fp, off_t* first_hole_from, off_t* first_hole_to, off_t block_id, size_t block_count);
+
 #endif
