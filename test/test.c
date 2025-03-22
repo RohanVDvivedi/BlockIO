@@ -90,7 +90,7 @@ int main()
 	{
 		off_t hole_start = 0;
 		off_t hole_last = 0;
-		if(get_hole_in_block_file(&bf, &hole_start, &hole_last, holes_to_check[i][0], holes_to_check[i][1] - holes_to_check[i][0] + 1))
+		if(!get_hole_in_block_file(&bf, &hole_start, &hole_last, holes_to_check[i][0], holes_to_check[i][1] - holes_to_check[i][0] + 1))
 			printf("failed to find a hole\n");
 		printf("%ld-%ld first hole at %ld-%ld\n\n", holes_to_check[i][0], holes_to_check[i][1], hole_start, hole_last);
 	}
