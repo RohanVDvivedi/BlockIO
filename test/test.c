@@ -78,6 +78,23 @@ int main()
 
 	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
 
+	off_t holes_to_check[4][2] = {
+		{150, 200},
+		{15, 20},
+		{36, 42},
+		{15, 42},
+		{20, 30},
+	};
+
+	for(int i = 0; i < sizeof(holes_to_check)/sizeof(holes_to_check[0]); i++)
+	{
+		off_t hole_start = 0;
+		off_t hole_last = 0;
+		if(get_hole_in_block_file(&bf, &hole_start, &hole_last, holes_to_check[i][0], holes_to_check[i][1] - holes_to_check[i][0] + 1))
+			printf("failed to find a hole\n");
+		printf("%ld-%ld first hole at %ld-%ld\n\n", holes_to_check[i][0], holes_to_check[i][1], hole_start, hole_last);
+	}
+
 	close_block_file(&bf);
 
 	return 0;
