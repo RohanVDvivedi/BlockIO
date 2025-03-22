@@ -209,7 +209,6 @@ int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off
 	const off_t last_offset = start_offset + bytes_count - 1;
 
 	const off_t start_hole_offset = lseek(fp->file_descriptor, start_offset, SEEK_HOLE);
-	printf("sho = %lu\n", start_hole_offset);
 	if(start_hole_offset < 0) // failure
 		return 0;
 	if(!(start_offset <= start_hole_offset && start_hole_offset <= last_offset)) // hole is not within range
@@ -220,7 +219,6 @@ int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off
 	(*first_hole_start_block_id) = UINT_ALIGN_DOWN(start_hole_offset, get_block_size_for_block_file(fp)) / get_block_size_for_block_file(fp);
 
 	const off_t end_hole_offset = lseek(fp->file_descriptor, start_hole_offset, SEEK_DATA);
-	printf("eho = %lu\n", end_hole_offset);
 	if(end_hole_offset < 0) // failure
 		return 0;
 	if(!(start_offset <= end_hole_offset && end_hole_offset <= last_offset)) // data is not within range
