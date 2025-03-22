@@ -201,3 +201,32 @@ int punch_hole_in_block_file(block_file* fp, off_t block_id, size_t block_count)
 
 	return 1;
 }
+
+int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off_t* first_hole_last_block_id, off_t block_id, size_t block_count)
+{
+	const off_t start_offset = block_id * get_block_size_for_block_file(fp);
+	const size_t bytes_count = block_count * get_block_size_for_block_file(fp);
+	const off_t last_offset = start_offset + bytes_count - 1;
+
+	const off_t start_hole_offset = lseek(fp->file_descriptor, start_offset, SEEK_HOLE);
+	if(start_hole_offset < 0) // failure
+		return 0;
+	if(!(start_offset <= start_hole_offset && start_hole_offset <= last_offset)) // hole is not within range
+	{
+		(*first_hole_start_block_id) = -1;
+		return 1;
+	}
+	(*first_hole_start_block_id) = UINT_ALIGN_DOWN(start_hole_offset, get_block_size_for_block_file(fp)) / get_block_size_for_block_file(fp);
+
+	const off_t end_hole_offset = lseek(fp->file_descriptor, start_hole_offset, SEEK_DATA);
+	if(end_hole_offset < 0) // failure
+		return 0;
+	if(!(start_offset <= end_hole_offset && end_hole_offset <= last_offset)) // data is not within range
+	{
+		(*first_hole_last_block_id) = block_id + block_count - 1;
+		return 1;
+	}
+	(*first_hole_last_block_id) = (UINT_ALIGN_UP(end_hole_offset, get_block_size_for_block_file(fp)) / get_block_size_for_block_file(fp)) - 1;
+
+	return 1;
+}
