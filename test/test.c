@@ -72,8 +72,8 @@ int main()
 
 	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
 
-	printf("making a hole in the file from block_id 17 to 35, both inclusive\n");
-	if(!punch_hole_in_block_file(&bf, 17, (36-17)))
+	printf("making a hole in the file from block_id 17 to 37, both inclusive\n");
+	if(!punch_hole_in_block_file(&bf, 17, (38-17)))
 		printf("failed to punch a hole\n");
 
 	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
