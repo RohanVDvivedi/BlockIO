@@ -78,6 +78,8 @@ int main()
 
 	printf("total_size = %"PRId64"\n\n", get_total_size_for_block_file(&bf));
 
+	printf("Now you will see how hole punching did not affect the size of the file and also your hole will always be aligned to filesystem page size\n\n");
+
 	off_t holes_to_check[][2] = {
 		{400, 500}, // completely out of range
 		{140, 200}, // first parts of holes is in range
@@ -94,6 +96,8 @@ int main()
 			printf("failed to find a hole\n");
 		printf("%ld-%ld first hole at %ld-%ld\n\n", holes_to_check[i][0], holes_to_check[i][1], hole_start, hole_last);
 	}
+
+	printf("total_size = %"PRId64"\n\n", get_total_size_for_block_file(&bf));
 
 	close_block_file(&bf);
 
