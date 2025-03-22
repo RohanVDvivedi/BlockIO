@@ -86,6 +86,12 @@ int main()
 		{350, 450}, // last parts of hole is in range
 		{130, 500}, // whole of hole is in range
 		{220, 320}, // middle part of hole is in range
+
+		// checking edges
+		{150, 183},
+		{150, 383},
+		{184, 500},
+		{384, 500},
 	};
 
 	for(int i = 0; i < sizeof(holes_to_check)/sizeof(holes_to_check[0]); i++)
