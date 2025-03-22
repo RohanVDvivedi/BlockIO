@@ -1,5 +1,0 @@
- * function that uses fallocate to punch a hole in the file
- 	int punch_hole_in_block_file(block_file* fp, off_t block_id, size_t block_count);
- * function that returns the first hole in a set of blocks
- 	// if in case no hole is found that first_hole_from is set to OFF_T_MAX
- 	int get_hole_in_block_file(block_file* fp, off_t* first_hole_from, off_t first_hole_to, off_t block_id, size_t block_count);
