@@ -78,7 +78,7 @@ int main()
 
 	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
 
-	off_t holes_to_check[4][2] = {
+	off_t holes_to_check[][2] = {
 		{150, 200},
 		{15, 20},
 		{36, 42},
