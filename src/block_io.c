@@ -185,9 +185,19 @@ size_t get_block_size_for_block_file(block_file* fp)
 off_t get_total_size_for_block_file(block_file* fp)
 {
 	struct stat file_status;
-    if (fstat(fp->file_descriptor, &file_status) < 0) {
-        return -1;
-    }
+	if(fstat(fp->file_descriptor, &file_status) < 0)
+		return -1;
 
-    return file_status.st_size;
+	return file_status.st_size;
+}
+
+int punch_hole_in_block_file(block_file* fp, off_t block_id, size_t block_count)
+{
+	off_t start_offset = block_id * get_block_size_for_block_file(fp);
+	size_t bytes_count = block_count * get_block_size_for_block_file(fp);
+
+	if(fallocate(fp->file_descriptor, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, start_offset, bytes_count) < 0)
+		return 0;
+
+	return 1;
 }
