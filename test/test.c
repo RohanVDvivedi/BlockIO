@@ -72,18 +72,18 @@ int main()
 
 	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
 
-	printf("making a hole in the file from block_id 17 to 37, both inclusive\n");
-	if(!punch_hole_in_block_file(&bf, 17, (38-17)))
+	printf("making a hole in the file from block_id 177 to 387, both inclusive\n");
+	if(!punch_hole_in_block_file(&bf, 177, (388-177)))
 		printf("failed to punch a hole\n");
 
-	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
+	printf("total_size = %"PRId64"\n\n", get_total_size_for_block_file(&bf));
 
 	off_t holes_to_check[][2] = {
-		{150, 200},
-		{15, 20},
-		{36, 42},
-		{15, 42},
-		{20, 30},
+		{400, 500}, // completely out of range
+		{140, 200}, // first parts of holes is in range
+		{350, 450}, // last parts of hole is in range
+		{130, 500}, // whole of hole is in range
+		{220, 320}, // middle part of hole is in range
 	};
 
 	for(int i = 0; i < sizeof(holes_to_check)/sizeof(holes_to_check[0]); i++)
