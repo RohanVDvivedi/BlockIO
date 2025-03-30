@@ -23,7 +23,7 @@ It works with large file support. i.e. off_t is 64 bits wide allowing you to acc
 ## Using The library
  * add `-lblockio -lcutlery` linker flag, while compiling your application
  * do not forget to include appropriate public api headers as and when needed. this includes
-   * `#include<block_io.h>`
+   * `#include<blockio/block_io.h>`
 
 ## Instructions for uninstalling library
 
