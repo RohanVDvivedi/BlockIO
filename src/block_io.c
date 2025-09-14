@@ -109,7 +109,7 @@ int close_block_file(const block_file* fp)
 
 static int find_device(const block_file* fp, char device[256])
 {
-	struct stat fp_stat;
+	struct stat64 fp_stat;
 	if(-1 == fstat64(fp->file_descriptor, &fp_stat))
 		return -1;
 	
@@ -184,7 +184,7 @@ size_t get_block_size_for_block_file(block_file* fp)
 
 off_t get_total_size_for_block_file(block_file* fp)
 {
-	struct stat file_status;
+	struct stat64 file_status;
 	if(fstat64(fp->file_descriptor, &file_status) < 0)
 		return -1;
 
