@@ -11,7 +11,7 @@
 int create_and_open_block_file(block_file* fp, const char* filename, int additional_flags)
 {
 	fp->block_size = 0;
-	fp->file_descriptor = open(filename,
+	fp->file_descriptor = open64(filename,
 								OPEN_WITH_READ_WRITE_PERMISSION |
 								CREATE_OR_FAIL_CREATE_IF_FILE_EXISTS |
 								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
@@ -23,7 +23,7 @@ int create_and_open_block_file(block_file* fp, const char* filename, int additio
 int open_block_file(block_file* fp, const char* filename, int additional_flags)
 {
 	fp->block_size = 0;
-	fp->file_descriptor = open(filename,
+	fp->file_descriptor = open64(filename,
 								OPEN_WITH_READ_WRITE_PERMISSION |
 								DO_NOT_UPDATE_ACCESS_TIME_ON_READ_CALLS |
 								(additional_flags & ALLOWED_ADDITIONAL_FLAGS));
@@ -33,7 +33,7 @@ int open_block_file(block_file* fp, const char* filename, int additional_flags)
 int temp_block_file(block_file* fp, const char* directory, int additional_flags)
 {
 	fp->block_size = 0;
-	fp->file_descriptor = open(directory,
+	fp->file_descriptor = open64(directory,
 								TEMP_FILE_CREATION |
 								OPEN_WITH_READ_WRITE_PERMISSION |
 								(additional_flags & ALLOWED_ADDITIONAL_FLAGS),
@@ -49,7 +49,7 @@ int read_blocks_from_block_file(block_file* fp, void* dest, off_t block_id, size
 	ssize_t bytes_read = 0;
 	while(bytes_count > bytes_read)
 	{
-		ssize_t result = pread(fp->file_descriptor, dest + bytes_read, bytes_count - bytes_read, start_offset + bytes_read);
+		ssize_t result = pread64(fp->file_descriptor, dest + bytes_read, bytes_count - bytes_read, start_offset + bytes_read);
 		if(result == -1 || result == 0)
 			return 0;
 		bytes_read += result;
@@ -66,7 +66,7 @@ int write_blocks_to_block_file(block_file* fp, const void* src, off_t block_id, 
 	ssize_t bytes_written = 0;
 	while(bytes_count > bytes_written)
 	{
-		ssize_t result = pwrite(fp->file_descriptor, src + bytes_written, bytes_count - bytes_written, start_offset + bytes_written);
+		ssize_t result = pwrite64(fp->file_descriptor, src + bytes_written, bytes_count - bytes_written, start_offset + bytes_written);
 		if(result == -1)
 			return 0;
 		bytes_written += result;
@@ -79,7 +79,7 @@ int truncate_block_file(block_file* fp, size_t block_count)
 {
 	off_t bytes_count = block_count * get_block_size_for_block_file(fp);
 
-	int result = ftruncate(fp->file_descriptor, bytes_count);
+	int result = ftruncate64(fp->file_descriptor, bytes_count);
 	if(result == -1)
 		return 0;
 
@@ -110,7 +110,7 @@ int close_block_file(const block_file* fp)
 static int find_device(const block_file* fp, char device[256])
 {
 	struct stat fp_stat;
-	if(-1 == fstat(fp->file_descriptor, &fp_stat))
+	if(-1 == fstat64(fp->file_descriptor, &fp_stat))
 		return -1;
 	
 	char major_minor[12];
@@ -185,7 +185,7 @@ size_t get_block_size_for_block_file(block_file* fp)
 off_t get_total_size_for_block_file(block_file* fp)
 {
 	struct stat file_status;
-	if(fstat(fp->file_descriptor, &file_status) < 0)
+	if(fstat64(fp->file_descriptor, &file_status) < 0)
 		return -1;
 
 	return file_status.st_size;
@@ -208,7 +208,7 @@ int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off
 	const size_t bytes_count = block_count * get_block_size_for_block_file(fp);
 	const off_t last_offset = start_offset + bytes_count - 1;
 
-	const off_t start_hole_offset = lseek(fp->file_descriptor, start_offset, SEEK_HOLE);
+	const off_t start_hole_offset = lseek64(fp->file_descriptor, start_offset, SEEK_HOLE);
 	if(start_hole_offset < 0) // failure
 		return 0;
 	if(!(start_offset <= start_hole_offset && start_hole_offset <= last_offset)) // hole is not within range
@@ -218,7 +218,7 @@ int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off
 	}
 	(*first_hole_start_block_id) = UINT_ALIGN_DOWN(start_hole_offset, get_block_size_for_block_file(fp)) / get_block_size_for_block_file(fp);
 
-	const off_t end_hole_offset = lseek(fp->file_descriptor, start_hole_offset, SEEK_DATA);
+	const off_t end_hole_offset = lseek64(fp->file_descriptor, start_hole_offset, SEEK_DATA);
 	if(end_hole_offset < 0) // failure
 		return 0;
 	if(!(start_offset <= end_hole_offset && end_hole_offset <= last_offset)) // data is not within range
