@@ -155,7 +155,7 @@ size_t get_block_size_for_block_file(block_file* fp)
 	}
 
 	printf("Given file is on device %s\n", device_path);
-	int device_fd = open(device_path, O_RDONLY);
+	int device_fd = open64(device_path, O_RDONLY);
 	if(device_fd == -1)
 	{
 		printf("Could not open device %s\n", device_path);
