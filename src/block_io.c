@@ -116,7 +116,7 @@ static int find_device(const block_file* fp, char device[256])
 	char major_minor[12];
 	sprintf(major_minor, "%u:%u ", major(fp_stat.st_dev), minor(fp_stat.st_dev));
 
-	FILE* f = fopen("/proc/self/mountinfo", "r");
+	FILE* f = fopen64("/proc/self/mountinfo", "r");
 
 	char sline[512];
 	int device_found = -1;
@@ -196,7 +196,7 @@ int punch_hole_in_block_file(block_file* fp, off_t block_id, size_t block_count)
 	off_t start_offset = block_id * get_block_size_for_block_file(fp);
 	size_t bytes_count = block_count * get_block_size_for_block_file(fp);
 
-	if(fallocate(fp->file_descriptor, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, start_offset, bytes_count) < 0)
+	if(fallocate64(fp->file_descriptor, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, start_offset, bytes_count) < 0)
 		return 0;
 
 	return 1;
