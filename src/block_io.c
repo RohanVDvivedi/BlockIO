@@ -113,7 +113,7 @@ static int find_device(const block_file* fp, char device[256])
 	if(-1 == fstat64(fp->file_descriptor, &fp_stat))
 		return -1;
 	
-	char major_minor[12];
+	char major_minor[64];
 	sprintf(major_minor, "%u:%u ", major(fp_stat.st_dev), minor(fp_stat.st_dev));
 
 	FILE* f = fopen64("/proc/self/mountinfo", "r");
