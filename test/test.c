@@ -119,7 +119,7 @@ int main()
 		{
 			off_t hole_start = 0;
 			off_t hole_last = 0;
-			if(!get_hole_in_block_file(&bf, &hole_start, &hole_last, last_hole_from+diffs[s], (last_hole_to+1-last_hole_from)+diffs[l]))
+			if(!get_hole_in_block_file(&bf, &hole_start, &hole_last, last_hole_from+diffs[s], ((last_hole_to+diffs[l])+1-(last_hole_from+diffs[s]))))
 				printf("failed to find a hole\n");
 			printf("%ld-%ld first hole at %ld-%ld\n\n", last_hole_from+diffs[s], last_hole_to+diffs[l], hole_start, hole_last);
 		}
