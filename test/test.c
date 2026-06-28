@@ -73,7 +73,7 @@ int main()
 	printf("total_size = %"PRId64"\n", get_total_size_for_block_file(&bf));
 
 	printf("making a hole in the file from block_id 177 to 387, both inclusive\n\n");
-	if(!punch_hole_in_block_file(&bf, 177, (388-177)))
+	if(!punch_hole_in_block_file(&bf, 177, (387+1-177)))
 		printf("failed to punch a hole\n");
 
 	printf("total_size = %"PRId64"\n\n", get_total_size_for_block_file(&bf));
@@ -104,6 +104,26 @@ int main()
 	}
 
 	printf("total_size = %"PRId64"\n\n", get_total_size_for_block_file(&bf));
+
+	off_t last_hole_from = BLOCK_COUNTS_TO_ACCESS-16;
+	off_t last_hole_to = BLOCK_COUNTS_TO_ACCESS-1;
+
+	printf("making a hole in the file from block_id %ld to %ld, both inclusive\n\n", last_hole_from, last_hole_to);
+	if(!punch_hole_in_block_file(&bf, last_hole_from, last_hole_to - last_hole_from + 1))
+		printf("failed to punch a hole\n");
+
+	off_t diffs[3] = {-5,0,+5};
+	for(int s = 0; s < 3; s++)
+	{
+		for(int l = 0; l < 2; l++)
+		{
+			off_t hole_start = 0;
+			off_t hole_last = 0;
+			if(!get_hole_in_block_file(&bf, &hole_start, &hole_last, last_hole_from+diffs[s], (last_hole_to+1-last_hole_from)+diffs[l]))
+				printf("failed to find a hole\n");
+			printf("%ld-%ld first hole at %ld-%ld\n\n", last_hole_from+diffs[s], last_hole_to+diffs[l], hole_start, hole_last);
+		}
+	}
 
 	close_block_file(&bf);
 
