@@ -117,6 +117,8 @@ static int find_device(const block_file* fp, char device[256])
 	sprintf(major_minor, "%u:%u ", major(fp_stat.st_dev), minor(fp_stat.st_dev));
 
 	FILE* f = fopen64("/proc/self/mountinfo", "r");
+	if(f == NULL)
+		return -1;
 
 	char sline[512];
 	int device_found = -1;
@@ -210,7 +212,14 @@ int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off
 
 	const off_t start_hole_offset = lseek64(fp->file_descriptor, start_offset, SEEK_HOLE);
 	if(start_hole_offset < 0) // failure
+	{
+		if(errno == ENXIO) // offset is at/beyond EOF -> no hole within the file in this range
+		{
+			(*first_hole_start_block_id) = -1;
+			return 1;
+		}
 		return 0;
+	}
 	if(!(start_offset <= start_hole_offset && start_hole_offset <= last_offset)) // hole is not within range
 	{
 		(*first_hole_start_block_id) = -1;
@@ -220,7 +229,14 @@ int get_hole_in_block_file(block_file* fp, off_t* first_hole_start_block_id, off
 
 	const off_t end_hole_offset = lseek64(fp->file_descriptor, start_hole_offset, SEEK_DATA);
 	if(end_hole_offset < 0) // failure
+	{
+		if(errno == ENXIO) // offset is at/beyond EOF -> hole extends to the end of the file
+		{
+			(*first_hole_last_block_id) = block_id + block_count - 1;
+			return 1;
+		}
 		return 0;
+	}
 	if(!(start_offset <= end_hole_offset && end_hole_offset <= last_offset)) // data is not within range
 	{
 		(*first_hole_last_block_id) = block_id + block_count - 1;
